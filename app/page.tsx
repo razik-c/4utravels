@@ -223,7 +223,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="md:container py-12">
+      <section className="md:container py-12" style={{overflow:'hidden'}}>
         <div className="px-5">
           <div className="flex items-center justify-between">
             <div className="">
