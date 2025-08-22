@@ -1,14 +1,28 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
 import Script from "next/script";
 import { useEffect } from "react";
 import Header from "@/components/Header";
 import "./globals.css";
-
 import { inter, merriweather } from "./fonts";
 import Footer from "@/components/Footer";
+
+// Minimal typing for the jQuery you load via <Script>
+// (Keeps TypeScript happy without pulling in full @types/jquery)
+declare global {
+  interface Window {
+    jQuery?: (selector: string) => {
+      owlCarousel: (opts: {
+        margin: number;
+        padding: number;
+        loop: boolean;
+        autoHeight: boolean;
+        nav: boolean;
+        responsive: Record<string, unknown>;
+      }) => void;
+    };
+  }
+}
 
 export default function RootLayout({
   children,
@@ -19,7 +33,6 @@ export default function RootLayout({
     const toggleDarkMode = () => {
       const moonIcon = document.getElementById("moon-icon");
       const sunIcon = document.getElementById("sun-icon");
-
       moonIcon?.classList.toggle("hidden");
       sunIcon?.classList.toggle("hidden");
     };
@@ -28,15 +41,17 @@ export default function RootLayout({
       .getElementById("dark-mode-button")
       ?.addEventListener("click", toggleDarkMode);
 
-    if (typeof window !== "undefined" && (window as any).jQuery) {
-      (window as any).jQuery("#carousel").owlCarousel({
-        margin: 20,
-        padding: 0,
-        loop: false,
-        autoHeight: true,
-        nav: false,
-        responsive: {},
-      });
+    if (typeof window !== "undefined" && window.jQuery) {
+      window
+        .jQuery("#carousel")
+        .owlCarousel({
+          margin: 20,
+          padding: 0,
+          loop: false,
+          autoHeight: true,
+          nav: false,
+          responsive: {},
+        });
     }
   }, []);
 
@@ -57,7 +72,7 @@ export default function RootLayout({
           <main className="prose md:prose-tablet lg:prose-desktop !max-w-none">
             {children}
           </main>
-               <Footer />
+          <Footer />
         </div>
       </body>
     </html>
